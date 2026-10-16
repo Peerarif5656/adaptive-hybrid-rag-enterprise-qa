@@ -1,0 +1,23 @@
+# Exact environment used for the dissertation study (Python 3.14, Windows 11).
+# Pinned 23 July 2026 from the verified working environment.
+# Note: ragas is pinned to the 0.2 line — 0.3+ requires scikit-network, which has
+# no prebuilt wheel for Python 3.14 on Windows. The langchain 0.3.x pins below are
+# the versions ragas 0.2.15 was built against; newer 1.x releases are incompatible.
+numpy==2.5.0
+pandas==3.0.4
+scikit-learn==1.9.0
+rank-bm25==0.2.2
+faiss-cpu==1.14.3
+sentence-transformers==5.6.0
+scipy==1.18.0
+matplotlib==3.11.0
+openai==2.47.0
+tiktoken==0.13.0
+tqdm==4.68.3
+python-dotenv==1.2.2
+ragas==0.2.15
+langchain==0.3.30
+langchain-core==0.3.86
+langchain-community==0.3.31
+langchain-openai==0.3.35
+datasets==5.0.0

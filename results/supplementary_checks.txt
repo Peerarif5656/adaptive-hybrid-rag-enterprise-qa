@@ -1,0 +1,216 @@
+
+========================================================================================
+1. Refusal rates and judge scoring of refusals (Section 3.6)
+========================================================================================
+Refusal rate (%) by configuration and dataset:
+dataset                      azure  cuad  financebench
+config                                                
+sparse_bm25                    0.0  26.7          74.0
+dense                          0.0  27.3          37.3
+static_hybrid                  0.0  24.7          47.3
+static_hybrid_cite             0.0  26.7          45.3
+static_hybrid_weighted         0.0  19.3          45.3
+static_hybrid_weighted_cite    0.0  23.3          45.3
+adaptive_hybrid                0.0  24.0          42.0
+adaptive_hybrid_cite           0.0  28.7          41.3
+
+Total refusals: 868
+  scored faithfulness = 1.0 : 490
+  scored faithfulness = 0.0 : 344
+  other values / NaN        : 34
+  financebench: share scored 1.0 = 69.1%, share scored 0.0 = 26.3%
+  cuad: share scored 1.0 = 32.6%, share scored 0.0 = 64.8%
+
+BM25 on FinanceBench: mean faithfulness
+  all questions     : 0.535 (n = 150)
+  answered questions: 0.727 (n = 39)
+  refusals          : 0.467 (n = 111)
+
+CUAD refusals with Recall@5 = 0: n = 288, scored 0.0 = 188
+
+========================================================================================
+2. Faithfulness on questions answered (non-refusal) in BOTH configurations (Section 4.3) - exploratory
+========================================================================================
+financebench RQ2   static_hybrid               -> static_hybrid_cite          n= 78 mean_a=0.825 mean_b=0.800 diff=-0.024 CI[-0.088, +0.035] dz=-0.09 raw_p=0.60247
+financebench RQ2   adaptive_hybrid             -> adaptive_hybrid_cite        n= 86 mean_a=0.810 mean_b=0.814 diff=+0.004 CI[-0.052, +0.059] dz=+0.02 raw_p=0.74972
+financebench extra static_hybrid_weighted      -> static_hybrid_weighted_cite n= 80 mean_a=0.771 mean_b=0.847 diff=+0.076 CI[+0.022, +0.132] dz=+0.31 raw_p=0.00592
+financebench RQ3   static_hybrid_weighted      -> adaptive_hybrid             n= 82 mean_a=0.763 mean_b=0.810 diff=+0.047 CI[-0.004, +0.098] dz=+0.20 raw_p=0.01938
+cuad         RQ2   static_hybrid               -> static_hybrid_cite          n=108 mean_a=0.826 mean_b=0.737 diff=-0.090 CI[-0.126, -0.051] dz=-0.44 raw_p=0.00005
+cuad         RQ2   adaptive_hybrid             -> adaptive_hybrid_cite        n=106 mean_a=0.781 mean_b=0.701 diff=-0.080 CI[-0.128, -0.032] dz=-0.32 raw_p=0.00106
+cuad         extra static_hybrid_weighted      -> static_hybrid_weighted_cite n=115 mean_a=0.756 mean_b=0.752 diff=-0.004 CI[-0.050, +0.043] dz=-0.02 raw_p=0.29421
+cuad         RQ3   static_hybrid_weighted      -> adaptive_hybrid             n=113 mean_a=0.740 mean_b=0.771 diff=+0.031 CI[-0.008, +0.070] dz=+0.14 raw_p=0.08429
+
+========================================================================================
+3. nDCG@5 recomputed with each gold document counted once (Sections 3.6, 4.4)
+========================================================================================
+Per-question nDCG@5 values above 1.0 in the stored results (chunk-level crediting):
+dataset       config                     
+cuad          adaptive_hybrid                4
+              adaptive_hybrid_cite           4
+              dense                          3
+              sparse_bm25                    3
+              static_hybrid                  4
+              static_hybrid_cite             4
+              static_hybrid_weighted         3
+              static_hybrid_weighted_cite    3
+financebench  adaptive_hybrid                9
+              adaptive_hybrid_cite           9
+              dense                          9
+              sparse_bm25                    4
+              static_hybrid                  5
+              static_hybrid_cite             5
+              static_hybrid_weighted         8
+              static_hybrid_weighted_cite    8
+Maximum stored nDCG@5: 1.931
+
+financebench: de-duplicated nDCG@5 means: sparse_bm25=0.232, dense=0.526, static_hybrid=0.440, static_hybrid_cite=0.440, static_hybrid_weighted=0.460, static_hybrid_weighted_cite=0.460, adaptive_hybrid=0.519, adaptive_hybrid_cite=0.519
+  sparse_bm25                 -> static_hybrid          diff=+0.208 CI[+0.155, +0.263] dz=+0.614 raw_p=2.06e-10
+  dense                       -> static_hybrid          diff=-0.086 CI[-0.144, -0.028] dz=-0.236 raw_p=6.16e-03
+  static_hybrid_weighted      -> adaptive_hybrid        diff=+0.058 CI[+0.034, +0.083] dz=+0.385 raw_p=3.41e-05
+  static_hybrid_weighted_cite -> adaptive_hybrid_cite   diff=+0.058 CI[+0.034, +0.083] dz=+0.385 raw_p=3.41e-05
+  Holm-adjusted p (32-test family, de-duplicated nDCG@5) sparse_bm25 -> static_hybrid: 6.18e-09
+  Holm-adjusted p (32-test family, de-duplicated nDCG@5) dense -> static_hybrid: 1.29e-01
+  Holm-adjusted p (32-test family, de-duplicated nDCG@5) static_hybrid_weighted -> adaptive_hybrid: 7.85e-04
+  Holm-adjusted p (32-test family, de-duplicated nDCG@5) static_hybrid_weighted_cite -> adaptive_hybrid_cite: 7.85e-04
+
+cuad: de-duplicated nDCG@5 means: sparse_bm25=0.037, dense=0.057, static_hybrid=0.053, static_hybrid_cite=0.053, static_hybrid_weighted=0.051, static_hybrid_weighted_cite=0.051, adaptive_hybrid=0.051, adaptive_hybrid_cite=0.051
+  sparse_bm25                 -> static_hybrid          diff=+0.017 CI[-0.006, +0.041] dz=+0.113 raw_p=1.96e-01
+  dense                       -> static_hybrid          diff=-0.004 CI[-0.030, +0.021] dz=-0.023 raw_p=8.64e-01
+  static_hybrid_weighted      -> adaptive_hybrid        diff=+0.000 CI[-0.007, +0.006] dz=+0.002 raw_p=6.71e-01
+  static_hybrid_weighted_cite -> adaptive_hybrid_cite   diff=+0.000 CI[-0.007, +0.006] dz=+0.002 raw_p=6.71e-01
+  Holm-adjusted p (32-test family, de-duplicated nDCG@5) sparse_bm25 -> static_hybrid: 1.00e+00
+  Holm-adjusted p (32-test family, de-duplicated nDCG@5) dense -> static_hybrid: 1.00e+00
+  Holm-adjusted p (32-test family, de-duplicated nDCG@5) static_hybrid_weighted -> adaptive_hybrid: 1.00e+00
+  Holm-adjusted p (32-test family, de-duplicated nDCG@5) static_hybrid_weighted_cite -> adaptive_hybrid_cite: 1.00e+00
+
+azure: de-duplicated nDCG@5 means: sparse_bm25=1.000, dense=0.989, static_hybrid=1.000, static_hybrid_cite=1.000, static_hybrid_weighted=1.000, static_hybrid_weighted_cite=1.000, adaptive_hybrid=1.000, adaptive_hybrid_cite=1.000
+  sparse_bm25                 -> static_hybrid          diff=+0.000 CI[+0.000, +0.000] dz=+0.000 raw_p=1.00e+00
+  dense                       -> static_hybrid          diff=+0.011 CI[+0.000, +0.027] dz=+0.196 raw_p=1.02e-01
+  static_hybrid_weighted      -> adaptive_hybrid        diff=+0.000 CI[+0.000, +0.000] dz=+0.000 raw_p=1.00e+00
+  static_hybrid_weighted_cite -> adaptive_hybrid_cite   diff=+0.000 CI[+0.000, +0.000] dz=+0.000 raw_p=1.00e+00
+  Holm-adjusted p (32-test family, de-duplicated nDCG@5) sparse_bm25 -> static_hybrid: 1.00e+00
+  Holm-adjusted p (32-test family, de-duplicated nDCG@5) dense -> static_hybrid: 1.00e+00
+  Holm-adjusted p (32-test family, de-duplicated nDCG@5) static_hybrid_weighted -> adaptive_hybrid: 1.00e+00
+  Holm-adjusted p (32-test family, de-duplicated nDCG@5) static_hybrid_weighted_cite -> adaptive_hybrid_cite: 1.00e+00
+
+========================================================================================
+4. Error-analysis categories split by refusal vs answer (Section 4.6)
+========================================================================================
+                                                                answered  refusal
+dataset      config                      error_category                          
+azure        adaptive_hybrid             unsupported_synthesis         4        0
+             adaptive_hybrid_cite        unsupported_synthesis         5        0
+             dense                       unsupported_synthesis         3        0
+             sparse_bm25                 unsupported_synthesis         4        0
+             static_hybrid               unsupported_synthesis         7        0
+             static_hybrid_cite          unsupported_synthesis         3        0
+             static_hybrid_weighted      unsupported_synthesis         4        0
+             static_hybrid_weighted_cite unsupported_synthesis         5        0
+cuad         adaptive_hybrid             routing_error                31       30
+                                         unsupported_synthesis         3        1
+             adaptive_hybrid_cite        routing_error                49       26
+                                         unsupported_synthesis         5        1
+             dense                       retrieval_failure            33       16
+                                         unsupported_synthesis         5        0
+             sparse_bm25                 retrieval_failure            29       25
+                                         unsupported_synthesis         3        1
+             static_hybrid               retrieval_failure            18       23
+                                         unsupported_synthesis         3        1
+             static_hybrid_cite          retrieval_failure            44       25
+                                         unsupported_synthesis         5        1
+             static_hybrid_weighted      retrieval_failure            28       19
+                                         unsupported_synthesis         4        1
+             static_hybrid_weighted_cite retrieval_failure            35       25
+                                         unsupported_synthesis         2        1
+financebench adaptive_hybrid             routing_error                 4       10
+                                         unsupported_synthesis        19        2
+             adaptive_hybrid_cite        routing_error                 3       13
+                                         unsupported_synthesis        20        1
+             dense                       retrieval_failure             6        8
+                                         unsupported_synthesis        17        1
+             sparse_bm25                 retrieval_failure             4       57
+                                         unsupported_synthesis        10        3
+             static_hybrid               retrieval_failure             2       19
+                                         unsupported_synthesis        21        0
+             static_hybrid_cite          retrieval_failure             4       18
+                                         unsupported_synthesis        22        1
+             static_hybrid_weighted      retrieval_failure             5       16
+                                         unsupported_synthesis        24        2
+             static_hybrid_weighted_cite retrieval_failure             2       16
+                                         unsupported_synthesis        13        2
+
+========================================================================================
+5. Top-5 passage overlap: fixed-weight vs adaptive hybrid (Section 5.2)
+========================================================================================
+financebench mean shared passages=4.41/5, mean Jaccard=0.824, identical set=59.3%, identical order=24.7%
+cuad         mean shared passages=4.46/5, mean Jaccard=0.824, identical set=50.0%, identical order=16.0%
+azure        mean shared passages=4.86/5, mean Jaccard=0.953, identical set=86.0%, identical order=68.0%
+
+========================================================================================
+6. Router behaviour (Sections 3.3, 4.5, 5.4)
+========================================================================================
+financebench weight min=0.397 max=0.706 mean=0.556 SD=0.072 | >0.7: 1 <0.3: 0 | Spearman(n_tokens, weight)=0.66 (p=2.0e-20) | labels={'semantic': 96, 'mixed': 37, 'lexical': 17}
+   extreme: w=0.397 label=lexical n_tokens=7 | Is Boeing's business subject to cyclicality?
+   extreme: w=0.706 label=semantic n_tokens=31 | Does AMD have a reasonably healthy liquidity profile based on its quick ratio for FY22? If the quick ratio is 
+   3M FY2018 capex question routing: {'label': 'semantic', 'dense_weight': 0.5787, 'semantic_score': 0.7621, 'lexical_score': 0.4452, 'n_tokens': 29, 'numeric_token_ratio': 0.069, 'n_quoted_phrases': 0, 'n_semantic_cues': 0, 'stopword_ratio': 0.4483, 'vocab_overlap': 0.7241, 'retrieval_confidence': -0.0702}
+cuad         weight min=0.408 max=0.495 mean=0.430 SD=0.009 | >0.7: 0 <0.3: 0 | Spearman(n_tokens, weight)=-0.29 (p=2.8e-04) | labels={'lexical': 148, 'mixed': 2}
+azure        weight min=0.367 max=0.600 mean=0.487 SD=0.062 | >0.7: 0 <0.3: 0 | Spearman(n_tokens, weight)=0.51 (p=1.4e-04) | labels={'mixed': 23, 'lexical': 16, 'semantic': 11}
+
+Azure: author-assigned query type vs router label
+router_label  lexical  mixed  semantic
+author_label                          
+lexical            12      9         1
+semantic            4     14        10
+
+========================================================================================
+7. Dense vs static hybrid (RQ1), citation coverage and answer relevancy (Sections 4.2, 4.3)
+========================================================================================
+     metric  mean_a  mean_b  mean_diff  ci_low  ci_high  cohens_dz  wilcoxon_p  p_adjusted
+   recall@5  0.6800  0.5933    -0.0867 -0.1600  -0.0133    -0.1874      0.0236      0.4018
+precision@5  0.1360  0.1187    -0.0173 -0.0320  -0.0027    -0.1874      0.0236      0.4018
+        mrr  0.4746  0.3888    -0.0858 -0.1490  -0.0234    -0.2186      0.0119      0.2387
+     ndcg@5  0.5696  0.4630    -0.1067 -0.1714  -0.0432    -0.2639      0.0032      0.0668
+      map@5  0.4746  0.3888    -0.0858 -0.1490  -0.0234    -0.2186      0.0119      0.2387
+
+Citation coverage (non-refusal answers) and answer relevancy:
+     dataset                      config  citation_coverage  answer_relevancy
+       azure             adaptive_hybrid                NaN             0.893
+       azure        adaptive_hybrid_cite              0.787             0.899
+       azure                       dense                NaN             0.886
+       azure                 sparse_bm25                NaN             0.885
+       azure               static_hybrid                NaN             0.894
+       azure          static_hybrid_cite              0.800             0.891
+       azure      static_hybrid_weighted                NaN             0.902
+       azure static_hybrid_weighted_cite              0.810             0.904
+        cuad             adaptive_hybrid                NaN             0.581
+        cuad        adaptive_hybrid_cite              0.546             0.550
+        cuad                       dense                NaN             0.551
+        cuad                 sparse_bm25                NaN             0.575
+        cuad               static_hybrid                NaN             0.593
+        cuad          static_hybrid_cite              0.427             0.571
+        cuad      static_hybrid_weighted                NaN             0.623
+        cuad static_hybrid_weighted_cite              0.426             0.587
+financebench             adaptive_hybrid                NaN             0.491
+financebench        adaptive_hybrid_cite              0.717             0.493
+financebench                       dense                NaN             0.533
+financebench                 sparse_bm25                NaN             0.221
+financebench               static_hybrid                NaN             0.450
+financebench          static_hybrid_cite              0.723             0.456
+financebench      static_hybrid_weighted                NaN             0.464
+financebench static_hybrid_weighted_cite              0.739             0.457
+
+'Is 3M capital-intensive (FY2022)?' faithfulness by configuration:
+   adaptive_hybrid              faithfulness=1.00 refusal=False
+   adaptive_hybrid_cite         faithfulness=1.00 refusal=False
+   dense                        faithfulness=0.40 refusal=False
+   sparse_bm25                  faithfulness=1.00 refusal=True
+   static_hybrid                faithfulness=0.40 refusal=False
+   static_hybrid_cite           faithfulness=1.00 refusal=False
+   static_hybrid_weighted       faithfulness=1.00 refusal=False
+   static_hybrid_weighted_cite  faithfulness=1.00 refusal=False
+
+========================================================================================
+8. Passages longer than the dense encoder limit of 256 word pieces (Section 6.3) - approximate
+========================================================================================
+Method: approximate (regex word-piece estimate; tokenizer not available offline)
+FinanceBench evidence passages: median length 397, share above 256 = 65%
